@@ -8,23 +8,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1F2B3D;
-    --paper:#FAF6EF;
-    --paper-dim:#F1EAD9;
-    --brass:#B8894A;
-    --teal:#2F6B63;
-    --rust:#C1503D;
-    --line:#D8D0C2;
+    --ink:#5B3A4B;
+    --paper:#FFFCF5;
+    --paper-dim:#FDEEF3;
+    --brass:#EC9BC0;
+    --teal:#F0C24B;
+    --rust:#E0577D;
+    --line:#F6DCE6;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
     padding:32px 16px 64px;
-    background:var(--ink);
-    background-image:
-      radial-gradient(circle at 20% 20%, rgba(184,137,74,0.10), transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(47,107,99,0.12), transparent 45%);
+    background:linear-gradient(160deg, #FBDCEA 0%, #FFF3D6 100%);
+    background-attachment:fixed;
     font-family:'Inter',sans-serif;
+    font-size:16px;
     color:var(--ink);
     display:flex;
     justify-content:center;
@@ -35,11 +34,11 @@
     background:var(--paper);
     border-radius:18px;
     overflow:hidden;
-    box-shadow:0 30px 60px rgba(0,0,0,0.35);
+    box-shadow:0 30px 60px rgba(224,87,125,0.25);
   }
   .greeting{
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--brass);
+    color:var(--ink);
     padding:20px 28px;
     display:flex;
     gap:14px;
@@ -47,26 +46,26 @@
   }
   .greeting .avatar{
     flex-shrink:0;
-    width:38px; height:38px;
+    width:42px; height:42px;
     border-radius:50%;
-    background:var(--brass);
+    background:var(--paper);
     color:var(--ink);
     display:flex; align-items:center; justify-content:center;
     font-family:'Fraunces',serif;
     font-weight:700;
-    font-size:15px;
+    font-size:16px;
   }
   .greeting .greeting-name{
     font-family:'Fraunces',serif;
     font-weight:600;
-    font-size:15px;
+    font-size:16px;
     margin-bottom:4px;
   }
   .greeting p{
     margin:0;
-    font-size:13.5px;
+    font-size:15px;
     line-height:1.55;
-    color:#E7E2D6;
+    color:#5B3A4B;
   }
   header{
     padding:28px 28px 22px;
@@ -74,7 +73,7 @@
     position:relative;
   }
   .eyebrow{
-    font-size:12px;
+    font-size:13px;
     letter-spacing:0.04em;
     color:var(--brass);
     margin-bottom:6px;
@@ -90,14 +89,15 @@
     display:flex;
     justify-content:space-between;
     margin-top:16px;
-    font-size:12px;
-    color:#6b6255;
+    font-size:13px;
+    color:#8A6577;
   }
-  .meta-row div span{display:block; color:var(--ink); font-size:15px; font-weight:600; margin-top:2px; font-family:'Fraunces',serif;}
+  .meta-row div span{display:block; color:var(--ink); font-size:16px; font-weight:600; margin-top:2px; font-family:'Fraunces',serif;}
 
   .punch{
-    position:absolute; width:24px; height:24px; background:var(--ink); border-radius:50%;
+    position:absolute; width:24px; height:24px; background:var(--brass); border-radius:50%;
     top:50%; transform:translateY(-50%);
+    opacity:0.35;
   }
   .punch.left{left:-12px;}
   .punch.right{right:-12px;}
@@ -106,7 +106,7 @@
   section:last-of-type{border-bottom:none;}
   h2{
     font-family:'Fraunces',serif;
-    font-size:17px;
+    font-size:19px;
     font-weight:600;
     margin:0 0 14px;
   }
@@ -115,17 +115,17 @@
     justify-content:space-between;
     align-items:center;
     gap:10px;
-    margin-bottom:10px;
+    margin-bottom:12px;
   }
-  .field label{font-size:14px; color:#4a4438;}
+  .field label{font-size:16px; color:#4a4438;}
   .field input[type=number], .field input[type=text]{
     border:1px solid var(--line);
     background:#fff;
-    border-radius:8px;
-    padding:8px 10px;
+    border-radius:10px;
+    padding:12px 14px;
     font-family:'Inter',sans-serif;
-    font-size:14px;
-    width:150px;
+    font-size:16px;
+    width:160px;
     text-align:right;
     color:var(--ink);
   }
@@ -133,7 +133,7 @@
   .row-item{
     display:flex;
     gap:8px;
-    margin-bottom:8px;
+    margin-bottom:10px;
     align-items:center;
   }
   .row-item input[type=text]{
@@ -141,65 +141,75 @@
     text-align:left;
     width:auto;
   }
-  .row-item input[type=number]{width:110px;}
+  .row-item input[type=number]{width:130px;}
+  .row-item input[type=text], .row-item input[type=number]{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:10px;
+    padding:12px 14px;
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    color:var(--ink);
+  }
   .row-item button{
     background:none;
     border:1px solid var(--line);
     color:var(--rust);
-    width:30px; height:30px;
-    border-radius:8px;
+    width:44px; height:44px;
+    border-radius:10px;
     cursor:pointer;
-    font-size:16px;
+    font-size:20px;
     line-height:1;
+    flex-shrink:0;
   }
   .add-btn{
     background:none;
     border:1px dashed var(--brass);
-    color:var(--brass);
-    padding:8px 14px;
-    border-radius:8px;
-    font-size:13px;
+    color:#C24F80;
+    padding:12px 18px;
+    border-radius:10px;
+    font-size:15px;
     cursor:pointer;
     font-family:'Inter',sans-serif;
     font-weight:600;
   }
-  .add-btn:hover{background:rgba(184,137,74,0.08);}
+  .add-btn:hover{background:rgba(236,155,192,0.12);}
 
   .section-note{
-    font-size:12.5px;
+    font-size:14px;
     line-height:1.5;
-    color:#6b6255;
-    margin:-6px 0 14px;
+    color:#8A6577;
+    margin:-4px 0 14px;
   }
   .saldo-note{
     text-align:center;
     font-family:'Fraunces',serif;
-    font-size:14.5px;
+    font-size:17px;
     font-style:italic;
-    color:var(--brass);
+    color:#C24F80;
     margin-top:12px;
   }
 
-  .summary-grid{display:grid; grid-template-columns:1fr auto; row-gap:8px; font-size:14px;}
+  .summary-grid{display:grid; grid-template-columns:1fr auto; row-gap:10px; font-size:16px;}
   .summary-grid .amount{text-align:right; font-weight:600; font-variant-numeric:tabular-nums;}
   .summary-grid .divider{grid-column:1/-1; border-top:1px solid var(--line); margin:6px 0;}
-  .summary-grid .highlight{font-family:'Fraunces',serif; font-size:19px;}
-  .positive{color:var(--teal);}
+  .summary-grid .highlight{font-family:'Fraunces',serif; font-size:22px;}
+  .positive{color:#C99A1B;}
   .negative{color:var(--rust);}
 
   .history-intro{
-    font-size:12.5px;
+    font-size:14px;
     line-height:1.5;
-    color:#6b6255;
+    color:#8A6577;
     margin:0 0 14px;
   }
   .close-month-btn{
-    background:var(--teal);
+    background:#C24F80;
     border:none;
     color:#fff;
-    padding:10px 16px;
-    border-radius:8px;
-    font-size:13px;
+    padding:14px 20px;
+    border-radius:10px;
+    font-size:16px;
     cursor:pointer;
     font-family:'Inter',sans-serif;
     font-weight:600;
@@ -209,23 +219,23 @@
   .comparison-tip{
     background:#fff;
     border:1px solid var(--line);
-    border-left:4px solid var(--teal);
-    border-radius:8px;
-    padding:12px 14px;
-    font-size:13.5px;
+    border-left:4px solid var(--brass);
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:15px;
     line-height:1.5;
     margin-bottom:16px;
   }
   .history-row{
     border:1px solid var(--line);
     border-radius:10px;
-    padding:12px 14px;
+    padding:14px 16px;
     margin-bottom:10px;
   }
   .history-row .history-month{
     font-family:'Fraunces',serif;
     font-weight:600;
-    font-size:14.5px;
+    font-size:16px;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -234,19 +244,72 @@
   .history-row .history-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    row-gap:4px;
-    font-size:12.5px;
+    row-gap:6px;
+    font-size:14px;
     color:#4a4438;
   }
   .history-row .history-grid .amt{text-align:right; font-weight:600;}
   .history-empty{
-    font-size:13px;
-    color:#8a8171;
+    font-size:14.5px;
+    color:#A87F92;
     font-style:italic;
   }
   .history-remove{
-    background:none; border:none; color:#8a8171; font-size:16px; cursor:pointer; line-height:1;
+    background:none; border:none; color:#A87F92; font-size:20px; cursor:pointer; line-height:1;
+    width:36px; height:36px;
   }
+
+  .chart-block{margin-bottom:24px;}
+  .chart-block h3{
+    font-family:'Fraunces',serif;
+    font-size:16px;
+    font-weight:600;
+    margin:0 0 10px;
+    color:var(--ink);
+  }
+  .chart-select{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    margin-bottom:14px;
+    width:100%;
+  }
+  .pie-wrap{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  svg.pie{width:150px; height:150px; flex-shrink:0;}
+  .pie-slice{cursor:pointer; stroke:#fff; stroke-width:1.5; transition:opacity .15s ease;}
+  .pie-slice:hover{opacity:0.85;}
+  .pie-slice.selected{stroke:var(--ink); stroke-width:2.5;}
+  .legend{flex:1; min-width:150px; display:flex; flex-direction:column; gap:6px;}
+  .legend-item{
+    display:flex; align-items:center; gap:8px;
+    font-size:14px; cursor:pointer; padding:5px 6px; border-radius:6px;
+  }
+  .legend-item.selected{background:var(--paper-dim);}
+  .legend-dot{width:12px; height:12px; border-radius:50%; flex-shrink:0;}
+  .legend-name{flex:1; color:var(--ink);}
+  .legend-pct{font-weight:600; color:#8A6577; font-size:13px;}
+  .chart-detail{
+    margin-top:10px;
+    font-size:14.5px;
+    color:#4a4438;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  svg.bar{width:100%; height:170px;}
+  .bar-rect{cursor:pointer; transition:opacity .15s ease;}
+  .bar-rect:hover{opacity:0.85;}
+  .bar-label{font-size:9px; fill:#8A6577; font-family:'Inter',sans-serif;}
 
 
 
@@ -256,9 +319,9 @@
     justify-content:space-between;
     align-items:center;
   }
-  .save-note{font-size:11px; color:#8a8171;}
+  .save-note{font-size:12px; color:#A87F92;}
   .reset-btn{
-    background:none; border:none; color:#8a8171; font-size:12px;
+    background:none; border:none; color:#A87F92; font-size:13px;
     text-decoration:underline; cursor:pointer;
   }
 </style>
@@ -332,6 +395,23 @@
     <p class="history-intro">Cuando termine el mes, aprieta "cerrar mes" para guardar una foto de cómo te fue. Los gastos del mes y los bonos parten en cero para el mes siguiente; el sueldo, la mesada y los gastos fijos se mantienen.</p>
     <button class="close-month-btn" id="cerrarMes">cerrar mes y guardar</button>
     <div id="comparisonTip"></div>
+
+    <div class="chart-block">
+      <h3>Cómo se repartió el mes</h3>
+      <select class="chart-select" id="pieMonthSelect"></select>
+      <div class="pie-wrap">
+        <svg class="pie" id="pieChart" viewBox="0 0 200 200"></svg>
+        <div class="legend" id="pieLegend"></div>
+      </div>
+      <div class="chart-detail" id="pieDetail">Toca una porción o un ítem de la lista para ver el detalle.</div>
+    </div>
+
+    <div class="chart-block">
+      <h3>Gasto mes a mes</h3>
+      <svg class="bar" id="barChart" viewBox="0 0 320 170"></svg>
+      <div class="chart-detail" id="barDetail">Toca una barra para ver el detalle de ese mes.</div>
+    </div>
+
     <div id="historialList"></div>
   </section>
 
@@ -392,6 +472,8 @@ function recalc(){
   document.getElementById('sumGastos').textContent = fmt(gastos);
   document.getElementById('sumCompras').textContent = fmt(compras);
   document.getElementById('sumDisponible').textContent = fmt(disponible);
+
+  updateComparisonTip();
 }
 
 function mesActual(){
@@ -400,14 +482,50 @@ function mesActual(){
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
+function updateComparisonTip(){
+  const tipBox = document.getElementById('comparisonTip');
+  if (!tipBox) return;
+
+  if (state.historial.length === 0){
+    tipBox.innerHTML = '';
+    return;
+  }
+
+  const select = document.getElementById('pieMonthSelect');
+  const idx = (select && select.value !== '') ? Number(select.value) : 0;
+
+  const actual = state.historial[idx];
+  const anterior = state.historial[idx + 1];
+
+  if (!anterior){
+    if (Number(actual.disponible) > 0){
+      tipBox.innerHTML = `<div class="comparison-tip">¡Muy bien! Lograste tener un mes excelente, es un gran paso para poder ahorrar 🎉</div>`;
+    } else {
+      tipBox.innerHTML = `<div class="comparison-tip">¡No te desanimes! El próximo mes nos organizaremos mejor 💪🏽</div>`;
+    }
+    return;
+  }
+
+  const gastoActual = actual.gastos + actual.compras;
+  const gastoAnterior = anterior.gastos + anterior.compras;
+  const diff = gastoActual - gastoAnterior;
+
+  if (Math.abs(diff) < 1){
+    tipBox.innerHTML = `<div class="comparison-tip">En ${actual.label} gastaste prácticamente lo mismo que en ${anterior.label}.</div>`;
+  } else if (diff > 0){
+    tipBox.innerHTML = `<div class="comparison-tip">En ${actual.label} gastaste ${fmt(diff)} más que en ${anterior.label}.</div>`;
+  } else {
+    tipBox.innerHTML = `<div class="comparison-tip">En ${actual.label} gastaste ${fmt(Math.abs(diff))} menos que en ${anterior.label}. Buen mes.</div>`;
+  }
+}
+
 function renderHistorial(){
   const list = document.getElementById('historialList');
-  const tipBox = document.getElementById('comparisonTip');
   list.innerHTML = '';
 
   if (state.historial.length === 0){
     list.innerHTML = '<p class="history-empty">Todavía no hay meses cerrados. Cuando cierres el primero, acá vas a ver cómo te fue mes a mes.</p>';
-    tipBox.innerHTML = '';
+    updateComparisonTip();
     return;
   }
 
@@ -428,18 +546,139 @@ function renderHistorial(){
     list.appendChild(row);
   });
 
-  const ultimo = state.historial[0];
-  const gastosActual = sumList(state.gastos) + sumList(state.compras);
-  const gastosUltimo = ultimo.gastos + ultimo.compras;
-  const diff = gastosActual - gastosUltimo;
+  updateComparisonTip();
+}
 
-  if (Math.abs(diff) < 1){
-    tipBox.innerHTML = `<div class="comparison-tip">Vas gastando prácticamente lo mismo que en ${ultimo.label}. Buena señal de estabilidad.</div>`;
-  } else if (diff > 0){
-    tipBox.innerHTML = `<div class="comparison-tip">Este mes vas gastando ${fmt(diff)} más que en ${ultimo.label}. Vale la pena revisar qué cambió, sobre todo en gastos del mes.</div>`;
-  } else {
-    tipBox.innerHTML = `<div class="comparison-tip">Este mes vas gastando ${fmt(Math.abs(diff))} menos que en ${ultimo.label}. Ese excedente es un buen candidato para el ahorro.</div>`;
+const PIE_COLORS = ['#EC9BC0','#F0C24B','#F7B8D0','#F4D35E','#E0577D','#F6E0A4','#D6789F','#F2A6C4','#E8B94E','#C24F80'];
+function colorForIndex(i){ return PIE_COLORS[i % PIE_COLORS.length]; }
+
+function polarToCartesian(cx, cy, r, angleDeg){
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+function describeArc(cx, cy, r, startAngle, endAngle){
+  const start = polarToCartesian(cx, cy, r, endAngle);
+  const end = polarToCartesian(cx, cy, r, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+  return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`;
+}
+
+function renderPieChart(){
+  const select = document.getElementById('pieMonthSelect');
+  const svg = document.getElementById('pieChart');
+  const legend = document.getElementById('pieLegend');
+  const detail = document.getElementById('pieDetail');
+  const ns = 'http://www.w3.org/2000/svg';
+
+  if (state.historial.length === 0){
+    select.innerHTML = '<option>Sin meses cerrados todavía</option>';
+    svg.innerHTML = '';
+    legend.innerHTML = '';
+    detail.textContent = 'Cuando cierres el primer mes, acá vas a ver en qué se te fue la plata.';
+    return;
   }
+
+  if (select.options.length !== state.historial.length){
+    select.innerHTML = state.historial.map((h,i) => `<option value="${i}">${h.label}</option>`).join('');
+  }
+  const idx = Math.min(Number(select.value || 0), state.historial.length - 1);
+  select.value = idx;
+
+  const entry = state.historial[idx];
+  const items = (entry.items || []).filter(it => Number(it.monto) > 0);
+  svg.innerHTML = '';
+  legend.innerHTML = '';
+
+  if (items.length === 0){
+    detail.textContent = 'No hay ítems registrados para este mes.';
+    updateComparisonTip();
+    return;
+  }
+
+  const total = items.reduce((a,b) => a + Number(b.monto), 0);
+  let angleStart = 0;
+
+  items.forEach((item, i) => {
+    const pct = (Number(item.monto) / total) * 100;
+    const angleEnd = angleStart + (pct / 100) * 359.999;
+
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', describeArc(100, 100, 90, angleStart, angleEnd));
+    path.setAttribute('fill', colorForIndex(i));
+    path.setAttribute('class', 'pie-slice');
+    path.dataset.index = i;
+    path.addEventListener('click', () => selectSlice(i, items, total));
+    svg.appendChild(path);
+
+    const row = document.createElement('div');
+    row.className = 'legend-item';
+    row.dataset.index = i;
+    row.innerHTML = `<span class="legend-dot" style="background:${colorForIndex(i)}"></span><span class="legend-name">${item.nombre}</span><span class="legend-pct">${pct.toFixed(0)}%</span>`;
+    row.addEventListener('click', () => selectSlice(i, items, total));
+    legend.appendChild(row);
+
+    angleStart = angleEnd;
+  });
+
+  detail.textContent = 'Toca una porción o un ítem de la lista para ver el detalle.';
+  updateComparisonTip();
+}
+
+function selectSlice(i, items, total){
+  const item = items[i];
+  const pct = (Number(item.monto) / total) * 100;
+  document.getElementById('pieDetail').textContent = `${item.nombre}: ${fmt(item.monto)} — ${pct.toFixed(1)}% del gasto de ese mes.`;
+  document.querySelectorAll('.pie-slice').forEach(el => el.classList.toggle('selected', Number(el.dataset.index) === i));
+  document.querySelectorAll('.legend-item').forEach(el => el.classList.toggle('selected', Number(el.dataset.index) === i));
+}
+
+function renderBarChart(){
+  const svg = document.getElementById('barChart');
+  const detail = document.getElementById('barDetail');
+  const ns = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+
+  if (state.historial.length === 0){
+    detail.textContent = 'Cuando cierres meses, acá vas a ver la evolución de tu gasto.';
+    return;
+  }
+
+  const meses = [...state.historial].reverse();
+  const chartW = 320, baseY = 140, topPad = 15;
+  const barGap = 14;
+  const barW = Math.min(48, (chartW - barGap * (meses.length + 1)) / meses.length);
+  const maxVal = Math.max(...meses.map(h => h.gastos + h.compras), 1);
+
+  meses.forEach((h, i) => {
+    const val = h.gastos + h.compras;
+    const barH = (val / maxVal) * (baseY - topPad);
+    const x = barGap + i * (barW + barGap);
+    const y = baseY - barH;
+
+    const rect = document.createElementNS(ns, 'rect');
+    rect.setAttribute('x', x);
+    rect.setAttribute('y', y);
+    rect.setAttribute('width', barW);
+    rect.setAttribute('height', Math.max(barH, 2));
+    rect.setAttribute('rx', 4);
+    rect.setAttribute('fill', i === meses.length - 1 ? '#C24F80' : '#EC9BC0');
+    rect.setAttribute('class', 'bar-rect');
+    rect.addEventListener('click', () => {
+      detail.textContent = `${h.label}: gasto total de ${fmt(val)}.`;
+    });
+    svg.appendChild(rect);
+
+    const label = document.createElementNS(ns, 'text');
+    label.setAttribute('x', x + barW / 2);
+    label.setAttribute('y', baseY + 14);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('class', 'bar-label');
+    label.textContent = h.label.split(' ')[0].slice(0, 3);
+    svg.appendChild(label);
+  });
+
+  detail.textContent = 'Toca una barra para ver el detalle de ese mes.';
 }
 
 function cerrarMes(){
@@ -448,10 +687,13 @@ function cerrarMes(){
   const gastos = sumList(state.gastos);
   const compras = sumList(state.compras);
   const disponible = ingresos - gastos - compras;
+  const items = [...state.gastos, ...state.compras]
+    .filter(it => Number(it.monto) > 0)
+    .map(it => ({nombre: it.nombre || 'Sin nombre', monto: Number(it.monto)}));
 
   state.historial.unshift({
     label: mesActual(),
-    ingresos, gastos, compras, disponible
+    ingresos, gastos, compras, disponible, items
   });
 
   state.compras = [];
@@ -460,6 +702,8 @@ function cerrarMes(){
   renderLists();
   recalc();
   renderHistorial();
+  renderPieChart();
+  renderBarChart();
   saveState();
 }
 
@@ -485,6 +729,8 @@ function loadState(){
   renderLists();
   recalc();
   renderHistorial();
+  renderPieChart();
+  renderBarChart();
 }
 
 function hydrateInputs(){
@@ -528,6 +774,8 @@ document.body.addEventListener('click', e => {
   }
 });
 
+document.getElementById('pieMonthSelect').addEventListener('change', renderPieChart);
+
 document.getElementById('cerrarMes').addEventListener('click', () => {
   if (confirm('¿Cerrar el mes? Se guardará este resumen en el historial y los gastos del mes y bonos partirán en cero.')){
     cerrarMes();
@@ -539,6 +787,8 @@ document.body.addEventListener('click', e => {
   if (t.dataset && t.dataset.removeHistorial !== undefined){
     state.historial.splice(Number(t.dataset.removeHistorial), 1);
     renderHistorial();
+    renderPieChart();
+    renderBarChart();
     saveState();
   }
 });
@@ -546,7 +796,7 @@ document.body.addEventListener('click', e => {
 document.getElementById('resetBtn').addEventListener('click', () => {
   if (confirm('¿Reiniciar toda la planilla? Se perderán los datos guardados.')){
     state = { sueldo:0, mesada:0, bonos:[], gastos:[{nombre:'Arriendo / cuentas', monto:0}], compras:[{nombre:'Supermercado', monto:0}], historial:[] };
-    hydrateInputs(); renderLists(); recalc(); renderHistorial(); saveState();
+    hydrateInputs(); renderLists(); recalc(); renderHistorial(); renderPieChart(); renderBarChart(); saveState();
   }
 });
 
