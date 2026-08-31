@@ -436,7 +436,7 @@
       <div class="divider"></div>
       <div class="highlight">Disponible</div><div class="amount highlight" id="sumDisponible">$0</div>
     </div>
-    <p class="saldo-note">Y esto que sobra, ¿lo ahorramos 🧐 o lo tomamos 🤪?</p>
+    <p class="saldo-note" id="saldoNote">Y esto que sobra, ¿lo ahorramos 🧐 o lo tomamos 🤪?</p>
   </section>
 
   <section>
@@ -464,9 +464,14 @@
     <div id="historialList"></div>
   </section>
 
-  <footer>
+  <footer style="flex-wrap:wrap; gap:10px;">
     <span class="save-note">Los datos se guardan automáticamente en este dispositivo.</span>
-    <button class="reset-btn" id="resetBtn">reiniciar planilla</button>
+    <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+      <button class="reset-btn" id="exportBtn">exportar respaldo</button>
+      <button class="reset-btn" id="importBtn">importar respaldo</button>
+      <input type="file" id="importInput" accept="application/json" style="display:none;">
+      <button class="reset-btn" id="resetBtn">reiniciar planilla</button>
+    </div>
   </footer>
 
 </div>
@@ -474,6 +479,10 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <p id="modalMessage"></p>
+    <div class="field" id="modalPeriodField" style="display:none;">
+      <label for="modalPeriodInput">Mes a cerrar</label>
+      <input type="text" id="modalPeriodInput" style="width:170px;">
+    </div>
     <div class="modal-actions">
       <button class="modal-cancel" id="modalCancel">Cancelar</button>
       <button class="modal-confirm" id="modalConfirm">Confirmar</button>
@@ -498,7 +507,7 @@ function rowTemplate(item, index, kind){
   div.className = 'row-item';
   div.innerHTML = `
     <input type="text" data-kind="${kind}" data-field="nombre" data-index="${index}" value="${item.nombre}" placeholder="nombre">
-    <input type="number" data-kind="${kind}" data-field="monto" data-index="${index}" value="${item.monto || ''}" placeholder="0" inputmode="numeric">
+    <input type="number" data-kind="${kind}" data-field="monto" data-index="${index}" value="${item.monto || ''}" placeholder="0" inputmode="numeric" min="0">
     <button data-kind="${kind}" data-index="${index}" data-action="remove">×</button>
   `;
   return div;
@@ -530,15 +539,39 @@ function recalc(){
   document.getElementById('sumIngresos').textContent = fmt(ingresos);
   document.getElementById('sumGastos').textContent = fmt(gastos);
   document.getElementById('sumCompras').textContent = fmt(compras);
-  document.getElementById('sumDisponible').textContent = fmt(disponible);
+
+  const dispEl = document.getElementById('sumDisponible');
+  dispEl.textContent = fmt(disponible);
+  dispEl.classList.toggle('negative', disponible < 0);
+  dispEl.classList.toggle('positive', disponible >= 0);
+
+  const saldoNote = document.getElementById('saldoNote');
+  if (saldoNote){
+    saldoNote.textContent = disponible < 0
+      ? `Te pasaste por ${fmt(Math.abs(disponible))} este mes. Revisemos juntas en qué se puede ajustar 💛`
+      : 'Y esto que sobra, ¿lo ahorramos 🧐 o lo tomamos 🤪?';
+  }
 
   updateComparisonTip();
 }
 
-function mesActual(){
-  const d = new Date();
+function formatMesLabel(d){
   const label = d.toLocaleDateString('es-CL', {month:'long', year:'numeric'});
   return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function mesActual(){
+  return formatMesLabel(new Date());
+}
+
+// Si se cierra el mes dentro de los primeros días (ej. el 2 o 3 de octubre),
+// lo más probable es que corresponda al mes que recién terminó, no al actual.
+function mesSugerido(){
+  const d = new Date();
+  if (d.getDate() <= 5){
+    d.setMonth(d.getMonth() - 1);
+  }
+  return formatMesLabel(d);
 }
 
 function updateComparisonTip(){
@@ -741,7 +774,7 @@ function renderBarChart(){
   detail.textContent = 'Toca una barra para ver el detalle de ese mes.';
 }
 
-function cerrarMes(){
+function cerrarMes(labelElegido){
   const bonos = sumList(state.bonos);
   const ingresos = (Number(state.sueldo)||0) + (Number(state.mesada)||0) + bonos;
   const gastos = sumList(state.gastos);
@@ -751,10 +784,17 @@ function cerrarMes(){
     .filter(it => Number(it.monto) > 0)
     .map(it => ({nombre: it.nombre || 'Sin nombre', monto: Number(it.monto)}));
 
-  state.historial.unshift({
-    label: mesActual(),
-    ingresos, gastos, compras, disponible, items
-  });
+  const label = (labelElegido && labelElegido.trim()) ? labelElegido.trim() : mesSugerido();
+  const entry = { label, ingresos, gastos, compras, disponible, items };
+
+  // Si ya existe un cierre con ese mismo mes (cierre tardío, doble clic, etc.),
+  // lo reemplazamos en vez de duplicarlo en el historial.
+  const existeIndex = state.historial.findIndex(h => h.label === label);
+  if (existeIndex !== -1){
+    state.historial[existeIndex] = entry;
+  } else {
+    state.historial.unshift(entry);
+  }
 
   state.compras = [];
   state.bonos = [];
@@ -798,29 +838,50 @@ function hydrateInputs(){
   document.getElementById('mesada').value = state.mesada || '';
 }
 
-function showConfirm(message, onConfirm){
+function showConfirm(message, onConfirm, options = {}){
   const overlay = document.getElementById('modalOverlay');
   const msgEl = document.getElementById('modalMessage');
   const confirmBtn = document.getElementById('modalConfirm');
   const cancelBtn = document.getElementById('modalCancel');
+  const periodField = document.getElementById('modalPeriodField');
+  const periodInput = document.getElementById('modalPeriodInput');
 
   msgEl.textContent = message;
+
+  if (options.periodDefault !== undefined){
+    periodField.style.display = 'flex';
+    periodInput.value = options.periodDefault;
+  } else {
+    periodField.style.display = 'none';
+    periodInput.value = '';
+  }
+
   overlay.classList.add('open');
 
-  const cleanup = () => {
+  // Se usa .onclick (en vez de addEventListener) a propósito: si el usuario
+  // hace clic dos veces seguidas en el botón que abre este modal, esto
+  // asegura que quede un solo handler activo y "Confirmar" no dispare
+  // la acción dos veces (esto era lo que provocaba meses duplicados).
+  confirmBtn.onclick = () => {
     overlay.classList.remove('open');
-    confirmBtn.removeEventListener('click', onConfirmClick);
-    cancelBtn.removeEventListener('click', onCancelClick);
+    onConfirm(periodInput.value);
   };
-  const onConfirmClick = () => { cleanup(); onConfirm(); };
-  const onCancelClick = () => { cleanup(); };
-
-  confirmBtn.addEventListener('click', onConfirmClick);
-  cancelBtn.addEventListener('click', onCancelClick);
+  cancelBtn.onclick = () => {
+    overlay.classList.remove('open');
+  };
 }
 
-document.getElementById('sueldo').addEventListener('input', e => { state.sueldo = e.target.value; recalc(); saveState(); });
-document.getElementById('mesada').addEventListener('input', e => { state.mesada = e.target.value; recalc(); saveState(); });
+function clampNoNegativo(inputEl){
+  const v = inputEl.value;
+  if (v !== '' && Number(v) < 0){
+    inputEl.value = 0;
+    return '0';
+  }
+  return v;
+}
+
+document.getElementById('sueldo').addEventListener('input', e => { state.sueldo = clampNoNegativo(e.target); recalc(); saveState(); });
+document.getElementById('mesada').addEventListener('input', e => { state.mesada = clampNoNegativo(e.target); recalc(); saveState(); });
 
 document.getElementById('addGasto').addEventListener('click', () => {
   state.gastos.push({nombre:'', monto:0});
@@ -840,7 +901,8 @@ document.body.addEventListener('input', e => {
   if (t.dataset && t.dataset.kind && t.dataset.field){
     const list = state[t.dataset.kind];
     const idx = Number(t.dataset.index);
-    list[idx][t.dataset.field] = t.value;
+    const val = t.dataset.field === 'monto' ? clampNoNegativo(t) : t.value;
+    list[idx][t.dataset.field] = val;
     recalc(); saveState();
   }
 });
@@ -861,7 +923,50 @@ document.getElementById('pieMonthSelect').addEventListener('change', e => {
 });
 
 document.getElementById('cerrarMes').addEventListener('click', () => {
-  showConfirm('¿Cerrar el mes? Se guardará este resumen en el historial y los gastos del mes y bonos partirán en cero.', cerrarMes);
+  const sugerido = mesSugerido();
+  const yaExiste = state.historial.some(h => h.label === sugerido);
+  const msg = yaExiste
+    ? `Ya hay un cierre guardado para "${sugerido}". Si confirmas, se reemplazará ese cierre con los datos actuales (no se va a duplicar).`
+    : '¿Cerrar el mes? Se guardará este resumen en el historial y los gastos del mes y bonos partirán en cero. Puedes ajustar a qué mes corresponde antes de confirmar.';
+  showConfirm(msg, (labelElegido) => cerrarMes(labelElegido), { periodDefault: sugerido });
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const fecha = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `sofi-gastos-respaldo-${fecha}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importInput').click();
+});
+
+document.getElementById('importInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    let loaded;
+    try{
+      loaded = JSON.parse(ev.target.result);
+    }catch(err){
+      alert('El archivo no parece un respaldo válido de esta planilla.');
+      return;
+    }
+    showConfirm('¿Reemplazar los datos actuales por los del respaldo importado? Se perderá lo que tengas ahora sin guardar.', () => {
+      state = Object.assign({ sueldo:0, mesada:0, bonos:[], gastos:[], compras:[], historial:[] }, loaded);
+      hydrateInputs(); renderLists(); recalc(); renderHistorial(); renderPieChart(); renderBarChart(); saveState();
+    });
+  };
+  reader.readAsText(file);
+  e.target.value = '';
 });
 
 document.body.addEventListener('click', e => {
