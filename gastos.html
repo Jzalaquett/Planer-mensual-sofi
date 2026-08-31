@@ -550,8 +550,7 @@ function updateComparisonTip(){
     return;
   }
 
-  const select = document.getElementById('pieMonthSelect');
-  const idx = (select && select.value !== '') ? Number(select.value) : 0;
+  const idx = pieSelectedIndex;
 
   const actual = state.historial[idx];
   const anterior = state.historial[idx + 1];
@@ -623,6 +622,8 @@ function describeArc(cx, cy, r, startAngle, endAngle){
   return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`;
 }
 
+let pieSelectedIndex = 0;
+
 function renderPieChart(){
   const select = document.getElementById('pieMonthSelect');
   const svg = document.getElementById('pieChart');
@@ -631,20 +632,20 @@ function renderPieChart(){
   const ns = 'http://www.w3.org/2000/svg';
 
   if (state.historial.length === 0){
-    select.innerHTML = '<option>Sin meses cerrados todavía</option>';
+    select.innerHTML = '<option value="">Sin meses cerrados todavía</option>';
     svg.innerHTML = '';
     legend.innerHTML = '';
     detail.textContent = 'Cuando cierres el primer mes, acá vas a ver en qué se te fue la plata.';
     return;
   }
 
-  if (select.options.length !== state.historial.length){
-    select.innerHTML = state.historial.map((h,i) => `<option value="${i}">${h.label}</option>`).join('');
+  select.innerHTML = state.historial.map((h,i) => `<option value="${i}">${h.label}</option>`).join('');
+  if (pieSelectedIndex >= state.historial.length || pieSelectedIndex < 0){
+    pieSelectedIndex = 0;
   }
-  const idx = Math.min(Number(select.value || 0), state.historial.length - 1);
-  select.value = idx;
+  select.value = pieSelectedIndex;
 
-  const entry = state.historial[idx];
+  const entry = state.historial[pieSelectedIndex];
   const items = (entry.items || []).filter(it => Number(it.monto) > 0);
   svg.innerHTML = '';
   legend.innerHTML = '';
@@ -854,7 +855,10 @@ document.body.addEventListener('click', e => {
   }
 });
 
-document.getElementById('pieMonthSelect').addEventListener('change', renderPieChart);
+document.getElementById('pieMonthSelect').addEventListener('change', e => {
+  pieSelectedIndex = Number(e.target.value);
+  renderPieChart();
+});
 
 document.getElementById('cerrarMes').addEventListener('click', () => {
   showConfirm('¿Cerrar el mes? Se guardará este resumen en el historial y los gastos del mes y bonos partirán en cero.', cerrarMes);
